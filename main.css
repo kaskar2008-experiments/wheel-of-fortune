@@ -15,11 +15,11 @@ body
 .power_controls {
     padding: 20px;
     text-align: center;
-    margin-top: 150px;
+    margin-top: 50px;
 }
 
 #spin_button {
-    width: 350px;
+    width: 50%;
 }
 
 #spin_button:not(.clickable) {
@@ -40,7 +40,7 @@ body
     background-position: top center;
     background-repeat: no-repeat;
     padding-top: 70px;
-    margin-top: 100px;
+    margin-top: 70px;
 }
 
 .center-box {
