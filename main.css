@@ -1,6 +1,7 @@
 body
 {
     font-family: arial;
+    background-color: #effff8;
     margin: 0;
 }
 
@@ -14,10 +15,11 @@ body
 .power_controls {
     padding: 20px;
     text-align: center;
+    margin-top: 150px;
 }
 
 #spin_button {
-    width: 250px;
+    width: 350px;
 }
 
 #spin_button:not(.clickable) {
@@ -38,6 +40,7 @@ body
     background-position: top center;
     background-repeat: no-repeat;
     padding-top: 70px;
+    margin-top: 100px;
 }
 
 .center-box {
