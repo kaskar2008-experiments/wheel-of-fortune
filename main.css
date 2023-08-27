@@ -16,6 +16,14 @@ body
     text-align: center;
 }
 
+#spin_button {
+    width: 250px;
+}
+
+#spin_button:not(.clickable) {
+    filter: grayscale(1);
+}
+
 #canvas {
     width: 100%;
     aspect-ratio: 1 / 1;
@@ -24,7 +32,7 @@ body
 /* Sets the background image for the wheel */
 .the_wheel
 {
-    flex-grow: 1;
+    aspect-ratio: 1 / 1;
     position: relative;
     background-image: url(./wheel_back.png);
     background-position: top center;
@@ -38,15 +46,20 @@ body
     left: 0;
     right: 0;
     bottom: 0;
-    display: flex;
+    display: none;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     aspect-ratio: 1 / 1;
     margin-top: 70px;
 }
 
-.the_wheel #win-label {
-    font-size: 36px;
+.center-box p {
+    font-size: 30px;
+}
+
+#win-label {
+    font-size: 66px;
     font-weight: bold;
     color: green;
 }
