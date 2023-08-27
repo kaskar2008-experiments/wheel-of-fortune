@@ -1,0 +1,191 @@
+<html>
+    <head>
+        <title>HTML5 Canvas Winning Wheel</title>
+        <link rel="stylesheet" href="./main.css" type="text/css" />
+        <script type="text/javascript" src="./Winwheel.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.12/dist/gsap.min.js"></script>
+    </head>
+    <body>
+        <div align="center">
+            <table cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td>
+                    <div class="power_controls">
+                        <img id="spin_button" class="clickable" src="spin_on.png" alt="Spin" onClick="startSpin();" />
+                    </div>
+                </td>
+                <td width="438" height="582" class="the_wheel" align="center" valign="center">
+                    <div class="center-box">
+                        <span id="win-label"></span>
+                    </div>
+                    <canvas id="canvas" width="434" height="434">
+                        <p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
+                    </canvas>
+                </td>
+            </tr>
+        </table>
+        <script>
+            Array.prototype.shuffle = function() {
+                let m = this.length, i;
+                while (m) {
+                  i = (Math.random() * m--) >>> 0;
+                  [this[m], this[i]] = [this[i], this[m]]
+                }
+                return this;
+            }
+
+            function getRandomHexColor() {
+              const letters = '0123456789ABCDEF';
+              let color = '#';
+              for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+              }
+              return color;
+            }
+
+            function calculateContrastRatio(hexColor) {
+              const textColor = '#000000'; // Черный цвет текста
+              const r1 = parseInt(hexColor.slice(1, 3), 16) / 255;
+              const g1 = parseInt(hexColor.slice(3, 5), 16) / 255;
+              const b1 = parseInt(hexColor.slice(5, 7), 16) / 255;
+              const r2 = parseInt(textColor.slice(1, 3), 16) / 255;
+              const g2 = parseInt(textColor.slice(3, 5), 16) / 255;
+              const b2 = parseInt(textColor.slice(5, 7), 16) / 255;
+
+              const L1 = 0.2126 * adjustGamma(r1) + 0.7152 * adjustGamma(g1) + 0.0722 * adjustGamma(b1);
+              const L2 = 0.2126 * adjustGamma(r2) + 0.7152 * adjustGamma(g2) + 0.0722 * adjustGamma(b2);
+
+              return (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
+            }
+
+            function adjustGamma(color) {
+              if (color <= 0.03928) {
+                return color / 12.92;
+              } else {
+                return Math.pow((color + 0.055) / 1.055, 2.4);
+              }
+            }
+
+            function generateContrastingColorScheme() {
+              let maxAttempts = 100;
+              let backgroundColor, contrastRatio;
+
+              while (maxAttempts > 0) {
+                backgroundColor = getRandomHexColor();
+                contrastRatio = calculateContrastRatio(backgroundColor);
+
+                if (contrastRatio >= 4.5) {
+                  break;
+                }
+
+                maxAttempts--;
+              }
+
+              return { backgroundColor, textColor: '#000000' };
+            }
+
+            // Create new wheel object specifying the parameters at creation time.
+            let theWheel = new Winwheel({
+                'outerRadius'     : 212,        // Set outer radius so wheel fits inside the background.
+                'innerRadius'     : 75,         // Make wheel hollow so segments don't go all way to center.
+                'textFontSize'    : 24,         // Set default font size for the segments.
+                'textOrientation' : 'vertical', // Make text vertial so goes down from the outside of wheel.
+                'textAlignment'   : 'outer',    // Align text to outside of wheel.
+                'numSegments'     : 25,         // Specify number of segments.
+                'segments'        :             // Define segments including colour and text.
+                [                               // font size and test colour overridden on backrupt segments.
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '50'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '275'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '475'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '200'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '75'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '300'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '500'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '100'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '325'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '50'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '125'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '350'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '50'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '150'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '375'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '100'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '175'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '400'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '125'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '200'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '425'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '350'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '250'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '450'},
+                   {'fillStyle' : generateContrastingColorScheme().backgroundColor, 'text' : '150'}
+                ].shuffle(),
+                'animation' :           // Specify the animation to use.
+                {
+                    'type'     : 'spinToStop',
+                    'duration' : 10,    // Duration in seconds.
+                    'spins'    : 3,     // Default number of complete spins.
+                    'callbackFinished' : alertPrize,
+                },
+            });
+
+            // Vars used by the code in this page to do power controls.
+            let wheelPower    = 3;
+            let wheelSpinning = false;
+
+            // -------------------------------------------------------
+            // Click handler for spin button.
+            // -------------------------------------------------------
+            function startSpin()
+            {
+                // Ensure that spinning can't be clicked again while already running.
+                if (wheelSpinning == false) {
+                    document.querySelector('#win-label').innerHTML = '';
+                    resetWheel();
+                    // Based on the power level selected adjust the number of spins for the wheel, the more times is has
+                    // to rotate with the duration of the animation the quicker the wheel spins.
+                    if (wheelPower == 1) {
+                        theWheel.animation.spins = 3;
+                    } else if (wheelPower == 2) {
+                        theWheel.animation.spins = 6;
+                    } else if (wheelPower == 3) {
+                        theWheel.animation.spins = 10;
+                    }
+
+                    // Disable the spin button so can't click again while wheel is spinning.
+                    document.getElementById('spin_button').src       = "spin_off.png";
+                    document.getElementById('spin_button').className = "";
+
+                    // Begin the spin animation by calling startAnimation on the wheel object.
+                    theWheel.startAnimation();
+
+                    // Set to true so that power can't be changed and spin button re-enabled during
+                    // the current animation. The user will have to reset before spinning again.
+                    wheelSpinning = true;
+                }
+            }
+
+            // -------------------------------------------------------
+            // Function for reset button.
+            // -------------------------------------------------------
+            function resetWheel()
+            {
+                theWheel.stopAnimation(false);  // Stop the animation, false as param so does not call callback function.
+                theWheel.rotationAngle = 0;     // Re-set the wheel angle to 0 degrees.
+                theWheel.draw();                // Call draw to render changes to the wheel.
+                wheelSpinning = false;          // Reset to false to power buttons and spin can be clicked again.
+            }
+
+            // -------------------------------------------------------
+            // Called when the spin animation has finished by the callback feature of the wheel because I specified callback in the parameters.
+            // -------------------------------------------------------
+            function alertPrize(indicatedSegment)
+            {
+                document.querySelector('#win-label').innerHTML = `${indicatedSegment.text}₽`;
+                document.getElementById('spin_button').src       = "spin_on.png";
+                document.getElementById('spin_button').className = "clickable";
+                wheelSpinning = false;
+            }
+        </script>
+    </body>
+</html>
