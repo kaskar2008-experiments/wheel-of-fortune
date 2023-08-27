@@ -1,0 +1,16 @@
+{
+  "name": "Выиграй скидку!",
+  "short_name": "Выиграй скидку!",
+  "start_url": "https://kaskar2008-experiments.github.io/wheel-of-fortune/index.html",
+  "display": "standalone",
+  "background_color": "#effff8",
+  "theme_color": "#ffffff",
+  "description": "Крути колесо фортуны и выиграй скидку!",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    }
+  ]
+}
